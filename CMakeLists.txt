@@ -133,33 +133,12 @@ if(CMAKE_BUILD_STYPE STREQUAL "Debug")
 	set(PACMAN_DEBUG 1)
 endif()
 
-include(CheckIncludeFile)
 
-CHECK_INCLUDE_FILE("mntent.h" HAS_MNTENT_H)
-CHECK_INCLUDE_FILE("sys/mnttab.h" HAS_SYS_MNTTAB_H)
-CHECK_INCLUDE_FILE("sys/mount.h" HAS_SYS_MOUNT_H)
-CHECK_INCLUDE_FILE("sys/param.h" HAS_SYS_PARAM_H)
-CHECK_INCLUDE_FILE("sys/statvfs.h" HAS_SYS_STATVFS_H)
-CHECK_INCLUDE_FILE("sys/types.h" HAS_SYS_TYPES_H)
-CHECK_INCLUDE_FILE("sys/ucred.h" HAS_SYS_UCRED_H)
-CHECK_INCLUDE_FILE("termios.h" HAS_TERMIOS_H)
-
-
-set(CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE")
-include(CheckFunctionExists)
-check_function_exists("getmntent" HAVE_GETMNTENT)
-check_function_exists("getmntinfo" HAVE_GETMNTINFO)
-check_function_exists("strndup" HAVE_STRNDUP)
-check_function_exists("strnlen" HAVE_STRNLEN)
-check_function_exists("strsep" HAVE_STRSEP)
-check_function_exists("swprintf" HAVE_SWPRINTF)
-check_function_exists("tcflush" HAVE_TCFLUSH)
-unset(CMAKE_REQUIRED_DEFINITIONS)
-
-
-include(CheckStructHasMember)
-#CHECK_STRUCT_HAS_MEMBER("struct timeval" tv_sec sys/select.h  HAVE_TIMEVAL_TV_SEC LANGUAGE C)
-
+find_program(PYTHON python3)
+include(FindCURL)
+include(FindLibArchive)
+include(FindIntl)
+include(FindOpenSSL) # crypto provider
 
 # set(HAVE_LIBCURL false)
 if(CURL_FOUND)
