@@ -186,6 +186,13 @@ else()
 	endif()
 endif()
 
+
+if (HAVE_STRUCT_STATVFS_F_FLAG)
+  	set(FSSTATSTYPE "struct statvfs")
+elseif (HAVE_STRUCT_STATFS_F_FLAGS)
+  	set(FSSTATSTYPE "struct statfs")
+endif ()
+
 if(CMAKE_BUILD_STYPE STREQUAL "Debug")
 	include(CheckCCompilerFlag)
 	check_c_compiler_flag(-Wcast-align HAS_CAST_ALIGN)
