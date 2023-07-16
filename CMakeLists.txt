@@ -86,11 +86,9 @@ include(CheckStructHasMember)
 #CHECK_STRUCT_HAS_MEMBER("struct timeval" tv_sec sys/select.h  HAVE_TIMEVAL_TV_SEC LANGUAGE C)
 
 
-CHECK_STRUCT_HAS_MEMBER("struct stat" st_blksize "sys/stat.h"  HAVE_STAT_ST_BLKSIZE LANGUAGE C)
-CHECK_STRUCT_HAS_MEMBER("struct statvfs" f_flag "sys/statvfs.h"  HAVE_STATVFS_F_FLAG LANGUAGE C)
-CHECK_STRUCT_HAS_MEMBER("struct statfs" f_flags "sys/param.h" HAVE_STATFS_F_FLAGS LANGUAGE C)
-if(NOT DEFINED HAVE_STATFS_F_FLAGS)
-	CHECK_STRUCT_HAS_MEMBER("struct statfs" f_flags "sys/mount.h" HAVE_STATFS_F_FLAGS LANGUAGE C)
+# set(HAVE_LIBCURL false)
+if(CURL_FOUND)
+	set(HAVE_LIBCURL true)
 endif()
 
 
