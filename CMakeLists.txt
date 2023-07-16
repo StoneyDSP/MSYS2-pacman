@@ -94,93 +94,42 @@ if(NOT DEFINED HAVE_STATFS_F_FLAGS)
 endif()
 
 
+configure_file("include/config.h" "include/config.h" @ONLY)
 
-# include(CheckTypeSize)
+add_library (configuration                                      INTERFACE)
+add_library (${PROJECT_NAME}::configuration                     ALIAS configuration)
 
-# check_type_size("((struct something*)0)->member" SIZEOF_MEMBER)
+target_include_directories (configuration
 
-# foreach type : [
-#     # type       # program prefix              # fallback
-#     ['mode_t',   '''#include <sys/types.h>''', 'unsigned int'],
-#     ['uid_t',    '''#include <sys/types.h>''', 'unsigned int'],
-#     ['off_t',    '''#include <sys/types.h>''', 'signed int'],
-#     ['pid_t',    '''#include <sys/types.h>''', 'signed int'],
-#     ['size_t',   '''#include <sys/types.h>''', 'unsigned int'],
-#     ['ssize_t',  '''#include <sys/types.h>''', 'signed int'],
-#     ['int64_t',  '''#include <stdint.h>''',    'signed long int'],
-#   ]
-#   if not cc.has_type(type[0], prefix: type[1])
-#     conf.set(type[0], type[2])
-#   endif
-# endforeach
+    INTERFACE
 
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
 
-# check_c_compiler_flag(-Wimplicit-function-declaration HAS_IMPLICIT_FUNCTION_DECLARATION)
-# if (HAS_IMPLICIT_FUNCTION_DECLARATION)
-# 	message("HAS_IMPLICIT_FUNCTION_DECLARATION")
-# 	#set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wzero-as-null-pointer-constant)
-# endif ()
+target_sources (configuration
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-	set(PEDANTIC_COMPILE_FLAGS -pedantic-errors -Wall -Wextra -pedantic -Wold-style-cast -Wundef -Wredundant-decls -Wwrite-strings -Wpointer-arith -Wcast-qual -Wformat=2 -Wmissing-include-dirs -Wcast-align -Wctor-dtor-privacy -Wdisabled-optimization -Winvalid-pch -Woverloaded-virtual -Wconversion -Wundef -Wno-ctor-dtor-privacy -Wno-format-nonliteral)
-	if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.6)
-		set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wno-dangling-else -Wno-unused-local-typedefs)
-	endif ()
-	if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5.0)
-		set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wdouble-promotion	-Wtrampolines -Wzero-as-null-pointer-constant -Wuseless-cast -Wvector-operation-performance -Wsized-deallocation -Wshadow)
-	endif ()
-	if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.0)
-		set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wshift-overflow=2 -Wnull-dereference -Wduplicated-cond)
-	endif ()
-	set(WERROR_FLAG -Werror)
-  endif ()
+    PUBLIC
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	set(PEDANTIC_COMPILE_FLAGS -Wall -Wextra -pedantic -Wconversion -Wundef -Wdeprecated -Wweak-vtables -Wshadow -Wno-gnu-zero-variadic-macro-arguments)
-	check_cxx_compiler_flag(-Wzero-as-null-pointer-constant HAS_NULLPTR_WARNING)
-	if (HAS_NULLPTR_WARNING)
-	  set(PEDANTIC_COMPILE_FLAGS ${PEDANTIC_COMPILE_FLAGS} -Wzero-as-null-pointer-constant)
-	endif ()
-	set(WERROR_FLAG -Werror)
-endif ()
+        FILE_SET configuration_PUBLIC_HEADERS
+        TYPE HEADERS
+        BASE_DIRS
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+            $<INSTALL_INTERFACE:include>
+        FILES
+            # include/application/configuration.h
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/config.h>
+            $<INSTALL_INTERFACE:include/config.h>
+)
 
-if (MSVC)
-	set(PEDANTIC_COMPILE_FLAGS /W3)
-	set(WERROR_FLAG /WX)
-endif ()
+set_target_properties (configuration
 
-# enable_language(C)
-
-include(GNUInstallDirs)
-# set(PREFIX "usr" CACHE PATH "")
-# set(EXEC_PREFIX "${PREFIX}/bin" CACHE PATH "")
-
-# set(BINDIR "bin" CACHE PATH "User executables (bin)")
-# set(LIBDIR "lib" CACHE PATH "Object code libraries (lib)")
-# set(SBINDIR "sbin" CACHE PATH "System admin executables (sbin)")
-# set(LIBEXECDIR "libexec" CACHE PATH "Program executables (libexec)")
-# set(SYSCONFDIR "etc" CACHE PATH "Read-only single-machine data (etc)")
-# set(SHAREDSTATEDIR "com" CACHE PATH "Modifiable architecture-independent data (com)")
-# set(LOCALSTATEDIR "var" CACHE PATH "Modifiable single-machine data (var)")
-
-# set(INCLUDEDIR "include" CACHE PATH "C header files (include)")
-# #set(OLDINCLUDEDIR "/usr/include" CACHE PATH "C header files for non-gcc (/usr/include)")
-
-# set(DATAROOTDIR "share" CACHE PATH "Read-only architecture-independent data root (share)")
-# set(DATADIR "${DATAROOTDIR}" CACHE PATH "Read-only architecture-independent data (DATAROOTDIR)")
-# set(INFODIR "${DATAROOTDIR}/info" CACHE PATH "Info documentation (DATAROOTDIR/info)")
-# set(MANDIR "${DATAROOTDIR}/man" CACHE PATH "Man documentation (DATAROOTDIR/man)")
-# set(LOCALEDIR "${DATAROOTDIR}/locale" CACHE PATH "Locale-dependent data (DATAROOTDIR/locale)")
-# set(DOCDIR "${DATAROOTDIR}/doc/${PROJECT_NAME}" CACHE PATH "Documentation root (DATAROOTDIR/doc/PROJECT_NAME)")
-# set(RUNSTATEDIR "${LOCALSTATEDIR}/run" CACHE PATH "Run-time variable data (LOCALSTATEDIR/run)")
-
-find_program(PYTHON python3)
-
-
-include(FindCURL)
-include(FindLibArchive)
-include(FindIntl)
-include(FindOpenSSL) # crypto provider
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY bin
+        LIBRARY_OUTPUT_DIRECTORY lib
+        ARCHIVE_OUTPUT_DIRECTORY lib
+        PDB_OUTPUT_DIRECTORY     bin
+)
 
 
 add_library (common 									STATIC)
@@ -252,14 +201,9 @@ set_target_properties (common
 		#COMPILE_WARNING_AS_ERROR FALSE
 )
 
-if (PACMAN_WERROR)
-	target_compile_options(common PRIVATE ${WERROR_FLAG})
-endif ()
-if (PACMAN_PEDANTIC)
-	target_compile_options(common PRIVATE ${PEDANTIC_COMPILE_FLAGS})
-endif ()
-
 target_compile_features(common PUBLIC c_std_99)
+
+target_link_libraries(common PUBLIC configuration)
 
 # libalpm_a = static_library(
 #   'alpm_objlib',
@@ -537,15 +481,9 @@ set_target_properties (alpm_objlib
 		#COMPILE_WARNING_AS_ERROR FALSE
 )
 
-if (PACMAN_WERROR)
-	target_compile_options(alpm_objlib PRIVATE ${WERROR_FLAG})
-endif ()
-if (PACMAN_PEDANTIC)
-	target_compile_options(alpm_objlib PRIVATE ${PEDANTIC_COMPILE_FLAGS})
-endif ()
-
 target_compile_features(alpm_objlib PUBLIC c_std_99)
 
+target_link_libraries(common PUBLIC configuration)
 
 # add_executable(pacman)
 
