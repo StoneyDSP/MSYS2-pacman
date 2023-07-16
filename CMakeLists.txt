@@ -1,8 +1,94 @@
 cmake_minimum_required(VERSION 3.17...3.26 FATAL_ERROR)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/scripts/cmake/Modules")
 
+if(NOT DEFINED CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Specifies the build type on single-configuration generators" FORCE)
+endif()
+
 project(pacman C)
 enable_language(CXX)
+
+include(GNUInstallDirs)
+#set(PREFIX "usr" CACHE PATH "")
+#set(EXEC_PREFIX "${PREFIX}/bin" CACHE PATH "")
+
+set(CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE")
+
+# pacman project defaults
+# set(prefix "/usr")
+# set(sysconfdir "/etc")
+# set(localstatedir "/var")
+
+set(libalpm_version "13.0.2")
+
+# meson-options.txt
+set(pkg_ext ".pkg.tar.gz" CACHE PATH "Set the file extension used by packages.")
+set(src_ext ".src.tar.gz" CACHE PATH "Set the file extension used by source packages.")
+set(makepkg_template_dir "/usr/share/makepkg-template" CACHE PATH "Template dir used by makepkg-template.")
+set(debug_suffix "debug") # you know what to do with this...
+
+# set(PREFIX "/usr")
+set(PREFIX "${CMAKE_BINARY_DIR}" CACHE PATH "")
+set(ROOTDIR "/" CACHE PATH "Set the location of the root operating directory.")
+
+# required join_paths() operations for the section after...
+cmake_path(APPEND LIBDIR "${PREFIX}" "/lib")
+cmake_path(APPEND SBINDIR "${PREFIX}" "/sbin")
+cmake_path(APPEND LIBEXECDIR "${PREFIX}" "/libexec")
+cmake_path(APPEND SHAREDSTATEDIR "${PREFIX}" "/com")
+cmake_path(APPEND INCLUDEDIR "${PREFIX}" "/include")
+
+cmake_path(APPEND DATAROOTDIR "${PREFIX}" "/share")
+cmake_path(APPEND SYSCONFDIR "${PREFIX}" "/etc")
+cmake_path(APPEND LOCALSTATEDIR "${PREFIX}" "/var")
+cmake_path(APPEND LOCALEDIR "${PREFIX}" "/${DATAROOTDIR}/locale")
+cmake_path(APPEND BINDIR "${PREFIX}" "/bin")
+cmake_path(APPEND MANDIR "${PREFIX}" "/${DATAROOTDIR}/man")
+cmake_path(APPEND LIBMAKEPKGDIR "${PREFIX}" "/makepkg")
+cmake_path(APPEND PKGDATADIR "${PREFIX}" "${PROJECT_NAME}")
+
+cmake_path(APPEND SYSHOOKDIR "${DATAROOTDIR}" "/libalpm/hooks/")
+cmake_path(APPEND CONFFILE "${SYSCONFDIR}" "/pacman.conf")
+cmake_path(APPEND DBPATH "${LOCALSTATEDIR}" "lib/pacman/")
+cmake_path(APPEND GPGDIR "${SYSCONFDIR}" "/pacman.d/gnupg/")
+cmake_path(APPEND LOGFILE "${LOCALSTATEDIR}" "/log/pacman.log")
+cmake_path(APPEND CACHEDIR "${LOCALSTATEDIR}" "/cache/pacman/pkg/")
+cmake_path(APPEND HOOKDIR "${SYSCONFDIR}" "/pacman.d/hooks/")
+
+# commandline options
+set(LIBDIR "${LIBDIR}" CACHE PATH "Object code libraries (lib)")
+set(SBINDIR "${SBINDIR}" CACHE PATH "System admin executables (sbin)")
+set(LIBEXECDIR "${LIBEXECDIR}" CACHE PATH "Program executables (libexec)")
+set(SHAREDSTATEDIR "${SHAREDSTATEDIR}" CACHE PATH "Modifiable architecture-independent data (com)")
+set(INCLUDEDIR "${INCLUDEDIR}" CACHE PATH "C header files (include)")
+
+set(DATAROOTDIR "${DATAROOTDIR}" CACHE PATH "Read-only architecture-independent data root (share)" FORCE)
+set(SYSCONFDIR "${SYSCONFDIR}" CACHE PATH "Read-only single-machine data (etc)" FORCE)
+set(LOCALSTATEDIR "${LOCALSTATEDIR}" CACHE PATH "Modifiable single-machine data (var)" FORCE)
+set(LOCALEDIR "${LOCALEDIR}" CACHE PATH "Locale-dependent data (DATAROOTDIR/locale)" FORCE)
+set(ROOTDIR "${ROOTDIR}" CACHE PATH "" FORCE)
+set(BINDIR "${BINDIR}" CACHE PATH "User executables (bin)" FORCE)
+set(MANDIR "${MANDIR}" CACHE PATH "Man documentation (DATAROOTDIR/man)" FORCE)
+
+set(DATADIR "${DATAROOTDIR}" CACHE PATH "Read-only architecture-independent data (DATAROOTDIR)")
+set(INFODIR "${DATAROOTDIR}/info" CACHE PATH "Info documentation (DATAROOTDIR/info)")
+set(DOCDIR "${DATAROOTDIR}/doc/${PROJECT_NAME}" CACHE PATH "Documentation root (DATAROOTDIR/doc/PROJECT_NAME)")
+set(RUNSTATEDIR "${LOCALSTATEDIR}/run" CACHE PATH "Run-time variable data (LOCALSTATEDIR/run)")
+
+set(SYSHOOKDIR "${SYSHOOKDIR}" CACHE PATH "")
+set(CONFFILE "${CONFFILE}" CACHE PATH "")
+set(DBPATH "${DBPATH}" CACHE PATH "")
+set(GPGDIR "${GPGDIR}" CACHE PATH "")
+set(LOGFILE "${LOGFILE}" CACHE FILEPATH "")
+set(CACHEDIR "${CACHEDIR}" CACHE FILEPATH "")
+set(HOOKDIR "${HOOKDIR}" CACHE FILEPATH "")
+set(LIBMAKEPKGDIR "${LIBMAKEPKGDIR}" CACHE PATH "" FORCE)
+set(PKGDATADIR "${PKGDATADIR}" CACHE PATH "" FORCE)
+
+set(SCRIPTLET_SHELL "/bin/sh" CACHE FILEPATH "The full path of the shell used to run install scriptlets.")
+set(LDCONFIG "/sbin/ldconfig" CACHE FILEPATH "Set the full path to ldconfig.")
+set(LIB_VERSION "${libalpm_version}" CACHE STRING "")
+set(BUILDSCRIPT "PKGBUILD" CACHE STRING "Set the build script name used by makepkg." FORCE)
 
 set(PROJECT_VERSION_MAJOR 6 CACHE STRING "First version number component of the ``PROJECT_VERSION`` variable as set by the ``project()`` command." FORCE)
 set(PROJECT_VERSION_MINOR 0 CACHE STRING "Second version number component of the ``PROJECT_VERSION`` variable as set by the ``project()`` command." FORCE)
@@ -17,10 +103,10 @@ set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-# 'c_std=gnu99',
 
-option(PACMAN_PEDANTIC "Enable extra warnings and expensive tests." OFF)
-option(PACMAN_WERROR "Halt the compilation with an error on compiler warnings." OFF)
+set(_GNU_SOURCE TRUE CACHE BOOL "")
+set(PACKAGE "${PROJECT_NAME}" CACHE STRING "")
+set(PACKAGE_VERSION "${PROJECT_VERSION}" CACHE STRING "")
 
 
 include(CheckCXXCompilerFlag)
