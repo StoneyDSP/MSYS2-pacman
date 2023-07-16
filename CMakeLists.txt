@@ -25,6 +25,37 @@ option(PACMAN_WERROR "Halt the compilation with an error on compiler warnings." 
 
 include(CheckCXXCompilerFlag)
 
+
+
+
+include(CheckIncludeFile)
+set(PACMAN_REQUIRED_SYSTEM_HEADERS)
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "mntent.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "sys/mnttab.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "sys/mount.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "sys/param.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "sys/statvfs.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "sys/types.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "sys/ucred.h")
+list(APPEND PACMAN_REQUIRED_SYSTEM_HEADERS "termios.h")
+foreach (_header IN LISTS PACMAN_REQUIRED_SYSTEM_HEADERS)
+	set(_header_string ${_header})
+	# underscorify(${_header})
+	string(REPLACE [[/]] [[_]] _header_string "${_header_string}")
+	string(REPLACE [[\]] [[_]] _header_string "${_header_string}")
+	string(REPLACE [[.]] [[_]] _header_string "${_header_string}")
+	string(REPLACE [[-]] [[_]] _header_string "${_header_string}")
+	CHECK_INCLUDE_FILE("${_header}" has_${_header_string})
+	if(has_${_header_string})
+		string(TOUPPER ${_header_string} _header_string)
+		##-- These shall print C-syntaxed booleans
+		set(HAVE_${_header_string} true CACHE BOOL "Found required header file: ${_header}" FORCE)
+	endif()
+	unset(has_${_header_string})
+endforeach()
+unset(_header)
+unset(_header_string)
+
 if(CMAKE_BUILD_STYPE STREQUAL "Debug")
 	include(CheckCCompilerFlag)
 	check_c_compiler_flag(-Wcast-align HAS_CAST_ALIGN)
