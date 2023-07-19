@@ -638,7 +638,150 @@ unset(_dep)
 
 target_compile_features(alpm_objlib PUBLIC c_std_99)
 
-target_link_libraries(common PUBLIC configuration)
+target_link_libraries(alpm_objlib PUBLIC configuration)
+
+# libalpm = library(
+#   'alpm',
+#   version : libalpm_version,
+#   objects: libalpm_a.extract_all_objects(recursive: true),
+#   include_directories : includes,
+#   dependencies : alpm_deps,
+#   install : true)
+
+add_library (alpm)
+add_library (${PROJECT_NAME}::alpm                    ALIAS alpm)
+
+target_include_directories (alpm
+
+    PUBLIC
+
+		$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/common>
+		$<INSTALL_INTERFACE:include/common>
+
+		$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/alpm>
+		$<INSTALL_INTERFACE:include/alpm>
+)
+
+target_sources(alpm
+	PRIVATE
+
+	# src/alpm/add.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/add.c>
+	$<INSTALL_INTERFACE:src/alpm/add.c>
+	# src/alpm/alpm.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/alpm.c>
+	$<INSTALL_INTERFACE:src/alpm/alpm.c>
+	# src/alpm/alpm_list.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/alpm_list.c>
+	$<INSTALL_INTERFACE:src/alpm/alpm_list.c>
+	# src/alpm/backup.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/backup.c>
+	$<INSTALL_INTERFACE:src/alpm/backup.c>
+	# src/alpm/base64.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/base64.c>
+	$<INSTALL_INTERFACE:src/alpm/base64.c>
+	# src/alpm/be_local.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/be_local.c>
+	$<INSTALL_INTERFACE:src/alpm/be_local.c>
+	# src/alpm/be_package.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/be_package.c>
+	$<INSTALL_INTERFACE:src/alpm/be_package.c>
+	# src/alpm/be_sync.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/be_sync.c>
+	$<INSTALL_INTERFACE:src/alpm/be_sync.c>
+	# src/alpm/conflict.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/conflict.c>
+	$<INSTALL_INTERFACE:src/alpm/conflict.c>
+	# src/alpm/db.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/db.c>
+	$<INSTALL_INTERFACE:src/alpm/db.c>
+	# src/alpm/deps.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/deps.c>
+	$<INSTALL_INTERFACE:src/alpm/deps.c>
+	# src/alpm/diskspace.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/diskspace.c>
+	$<INSTALL_INTERFACE:src/alpm/diskspace.c>
+	# src/alpm/dload.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/dload.c>
+	$<INSTALL_INTERFACE:src/alpm/dload.c>
+	# src/alpm/error.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/error.c>
+	$<INSTALL_INTERFACE:src/alpm/error.c>
+	# src/alpm/filelist.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/filelist.c>
+	$<INSTALL_INTERFACE:src/alpm/filelist.c>
+	# src/alpm/graph.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/graph.c>
+	$<INSTALL_INTERFACE:src/alpm/graph.c>
+	# src/alpm/group.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/group.c>
+	$<INSTALL_INTERFACE:src/alpm/group.c>
+	# src/alpm/handle.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/handle.c>
+	$<INSTALL_INTERFACE:src/alpm/handle.c>
+	# src/alpm/hook.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/hook.c>
+	$<INSTALL_INTERFACE:src/alpm/hook.c>
+	# src/alpm/log.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/log.c>
+	$<INSTALL_INTERFACE:src/alpm/log.c>
+	# src/alpm/package.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/package.c>
+	$<INSTALL_INTERFACE:src/alpm/package.c>
+	# src/alpm/pkghash.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/pkghash.c>
+	$<INSTALL_INTERFACE:src/alpm/pkghash.c>
+	# src/alpm/rawstr.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/rawstr.c>
+	$<INSTALL_INTERFACE:src/alpm/rawstr.c>
+	# src/alpm/remove.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/remove.c>
+	$<INSTALL_INTERFACE:src/alpm/remove.c>
+	# src/alpm/signing.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/signing.c>
+	$<INSTALL_INTERFACE:src/alpm/signing.c>
+	# src/alpm/sync.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/sync.c>
+	$<INSTALL_INTERFACE:src/alpm/sync.c>
+	# src/alpm/trans.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/trans.c>
+	$<INSTALL_INTERFACE:src/alpm/trans.c>
+	# src/alpm/util.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/util.c>
+	$<INSTALL_INTERFACE:src/alpm/util.c>
+	# src/alpm/version.c
+	$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/src/alpm/version.c>
+	$<INSTALL_INTERFACE:src/alpm/version.c>
+)
+
+
+set_target_properties (alpm
+
+    PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY bin
+        LIBRARY_OUTPUT_DIRECTORY lib
+        ARCHIVE_OUTPUT_DIRECTORY lib
+        PDB_OUTPUT_DIRECTORY     bin
+
+		VERSION "${libalpm_version}"
+
+		IMPORTED_OBJECTS ${PROJECT_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}/libalpm_objlib.a
+
+		C_STANDARD 99
+		C_STANDARD_REQUIRED TRUE
+		VISIBILITY_INLINES_HIDDEN TRUE
+		HAS_CXX FALSE
+		#COMPILE_WARNING_AS_ERROR FALSE
+)
+foreach(_dep IN LISTS ALPM_DEPS)
+	add_dependencies(alpm "${_dep}")
+endforeach()
+unset(_dep)
+
+target_compile_features(alpm PUBLIC c_std_99)
+
+target_link_libraries(alpm PUBLIC configuration)
+
 
 # add_executable(pacman)
 
