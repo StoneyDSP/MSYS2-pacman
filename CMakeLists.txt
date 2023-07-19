@@ -232,6 +232,12 @@ include(FindCURL)
 include(FindLibArchive)
 include(FindIntl)
 include(FindOpenSSL) # crypto provider
+set(ALPM_DEPS)
+list(APPEND ALPM_DEPS "OpenSSL::Crypto")
+list(APPEND ALPM_DEPS "LibArchive::LibArchive")
+list(APPEND ALPM_DEPS "CURL::libcurl")
+list(APPEND ALPM_DEPS "Intl::Intl")
+set(ALPM_DEPS "${ALPM_DEPS}" CACHE STRING "")
 
 # set(HAVE_LIBCURL false)
 if(CURL_FOUND)
@@ -625,6 +631,10 @@ set_target_properties (alpm_objlib
 		HAS_CXX FALSE
 		#COMPILE_WARNING_AS_ERROR FALSE
 )
+foreach(_dep IN LISTS ALPM_DEPS)
+	add_dependencies(alpm_objlib "${_dep}")
+endforeach()
+unset(_dep)
 
 target_compile_features(alpm_objlib PUBLIC c_std_99)
 
