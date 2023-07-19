@@ -5,6 +5,27 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Specifies the build type on single-configuration generators" FORCE)
 endif()
 
+# Detect msys2.ini to figure MSYS_ROOT_DIR
+set(Z_MSYS_ROOT_DIR_CANDIDATE "${CMAKE_CURRENT_LIST_DIR}")
+while(NOT DEFINED Z_MSYS_ROOT_DIR)
+    if(EXISTS "${Z_MSYS_ROOT_DIR_CANDIDATE}msys2.ini")
+        set(Z_MSYS_ROOT_DIR "${Z_MSYS_ROOT_DIR_CANDIDATE}msys64" CACHE INTERNAL "msys root directory")
+    elseif(EXISTS "${Z_MSYS_ROOT_DIR_CANDIDATE}msys64/msys2.ini")
+        set(Z_MSYS_ROOT_DIR "${Z_MSYS_ROOT_DIR_CANDIDATE}msys64" CACHE INTERNAL "msys root directory")
+    elseif(IS_DIRECTORY "${Z_MSYS_ROOT_DIR_CANDIDATE}")
+        get_filename_component(Z_MSYS_ROOT_DIR_TEMP "${Z_MSYS_ROOT_DIR_CANDIDATE}" DIRECTORY)
+        if(Z_MSYS_ROOT_DIR_TEMP STREQUAL Z_MSYS_ROOT_DIR_CANDIDATE)
+            #z_msys_add_fatal_error("Unable to determine default msys64 installation files directory!")
+            break() # If unchanged, we have reached the root of the drive without finding msys64.
+        endif()
+        set(Z_MSYS_ROOT_DIR_CANDIDATE "${Z_MSYS_ROOT_DIR_TEMP}")
+        unset(Z_MSYS_ROOT_DIR_TEMP)
+    else()
+        break()
+    endif()
+endwhile()
+unset(Z_MSYS_ROOT_DIR_CANDIDATE)
+
 project(pacman C)
 enable_language(CXX)
 
