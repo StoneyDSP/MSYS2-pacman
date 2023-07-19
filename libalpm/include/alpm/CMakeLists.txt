@@ -1,0 +1,29 @@
+set(libalpm_HEADERS)
+list(APPEND libalpm_HEADERS
+	add.h
+	alpm.h
+	alpm_list.h
+	backup.h
+	base64.h
+	conflict.h
+	db.h
+	deps.h
+	diskspace.h
+	dload.h
+	error.c
+	filelist.h
+	graph.h
+	group.h
+	handle.h
+	hook.h
+	libarchive-compat.h
+	log.h
+	package.h
+	pkghash.h
+	remove.h
+	signing.h
+	sync.h
+	trans.h
+	util.h
+)
+set(libalpm_HEADERS "${libalpm_HEADERS}" CACHE STRING "" FORCE)
