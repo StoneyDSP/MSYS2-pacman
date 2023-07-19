@@ -1,0 +1,53 @@
+{
+	"terminal.integrated.profiles.windows": {
+        "MSYS2 UCRT64": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -ucrt64"
+            ]
+        },
+        "MSYS2 MINGW64": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -mingw64"
+            ]
+        },
+        "MSYS2 CLANG64": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -clang64"
+            ]
+        },
+        "MSYS2 MINGW32": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -mingw32"
+            ]
+        },
+        "MSYS2 CLANG32": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -clang32"
+            ]
+        },
+        "MSYS2 CLANGARM64": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -clangarm64"
+            ]
+        },
+        "MSYS2 MSYS64": {
+            "path": "cmd.exe",
+            "args": [
+                "/c",
+                "C:\\msys64\\msys2_shell.cmd -defterm -here -no-start -msys2"
+            ]
+        }
+    },
+
