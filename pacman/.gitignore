@@ -1,5 +1,3 @@
-*.sh
-
 .vscode
 .cache
 usr
