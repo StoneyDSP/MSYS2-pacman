@@ -1,41 +1,20 @@
 cmake_minimum_required(VERSION 3.17...3.27 FATAL_ERROR)
 
-project(libcommon C)
-
-enable_language(CXX)
-
-include(CheckFunctionExists)
-set(COMMON_REQUIRED_SYSTEM_FUNCTIONS)
-list(APPEND COMMON_REQUIRED_SYSTEM_FUNCTIONS "strndup")
-list(APPEND COMMON_REQUIRED_SYSTEM_FUNCTIONS "strnlen")
-foreach (_symbol IN LISTS COMMON_REQUIRED_SYSTEM_FUNCTIONS)
-	set(CMAKE_REQUIRED_DEFINITIONS "_GNU_SOURCE")
-	check_function_exists("${_symbol}" has_${_symbol})
-	if(has_${_symbol})
-		##-- These shall print integer 0's or 1's
-		string(TOUPPER ${_symbol} _symbol)
-		set(HAVE_${_symbol} 1 CACHE BOOL "" FORCE)
-	endif()
-	unset(has_${_symbol})
-endforeach()
-unset(_symbol)
-
-add_library (common 									STATIC)
-add_library (pacman::common                    			ALIAS common)
-
+project(libcommon)
+enable_language(C)
 
 if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
 
-	configure_file ("include/common/defines.h"       			"include/common/defines.h")
-	configure_file ("include/common/config.h"       			"include/common/config.h")
+    configure_file ("include/common/ini.h"       								"include/common/ini.h")
+	configure_file ("include/common/util-common.h"        						"include/common/util-common.h")
 
-    configure_file ("include/common/ini.h"       				"include/common/ini.h")
-	configure_file ("src/common/ini.c"          				"src/common/ini.c")
-
-    configure_file ("include/common/util-common.h"        		"include/common/util-common.h")
-    configure_file ("src/common/util-common.c"             		"src/common/util-common.c")
+	configure_file ("src/common/ini.c"          								"src/common/ini.c")
+    configure_file ("src/common/util-common.c"             						"src/common/util-common.c")
 
 endif ()
+
+add_library (common 															STATIC)
+add_library (${CMAKE_PROJECT_NAME}::common                    					ALIAS common)
 
 target_include_directories (common
 
@@ -57,9 +36,6 @@ target_sources (common
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/common>
             $<INSTALL_INTERFACE:include/common>
         FILES
-			# include/common/config.h
-			$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/common/config.h>
-			$<INSTALL_INTERFACE:include/common/config.h>
             # include/common/ini.h
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/common/ini.h>
             $<INSTALL_INTERFACE:include/common/ini.h>
@@ -68,7 +44,7 @@ target_sources (common
             $<INSTALL_INTERFACE:include/common/util-common.h>
 )
 
-include("./src/common/CMakeLists.txt")
+# include("./src/common/CMakeLists.txt")
 
 target_sources (common
 
@@ -94,7 +70,9 @@ set_target_properties (common
 		C_STANDARD_REQUIRED TRUE
 		VISIBILITY_INLINES_HIDDEN TRUE
 		HAS_CXX FALSE
-		#COMPILE_WARNING_AS_ERROR FALSE
 )
 
 target_compile_features(common PUBLIC c_std_99)
+
+# find_package(pacman)
+target_link_libraries(common PUBLIC ${CMAKE_PROJECT_NAME}::configuration)
