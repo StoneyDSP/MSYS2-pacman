@@ -1,0 +1,3 @@
+[submodule "libmakepkg"]
+	path = libmakepkg
+	url = ../../StoneyDSP/MSYS2-libmakepkg.git
