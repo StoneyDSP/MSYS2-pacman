@@ -75,4 +75,4 @@ set_target_properties (common
 target_compile_features(common PUBLIC c_std_99)
 
 # find_package(pacman)
-target_link_libraries(common PUBLIC ${CMAKE_PROJECT_NAME}::configuration)
+target_link_libraries(common PUBLIC pacman::configuration)

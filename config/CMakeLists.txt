@@ -323,7 +323,7 @@ if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
 endif()
 
 add_library (configuration                                      	INTERFACE)
-add_library (${CMAKE_PROJECT_NAME}::configuration                   ALIAS configuration)
+add_library (pacman::configuration                   				ALIAS configuration)
 
 target_include_directories (configuration
 

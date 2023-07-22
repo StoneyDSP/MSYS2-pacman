@@ -310,7 +310,7 @@ unset(_dep)
 target_compile_features(alpm_objlib PUBLIC c_std_99)
 
 # find_package(pacman)
-target_link_libraries(alpm_objlib PUBLIC ${CMAKE_PROJECT_NAME}::configuration)
+target_link_libraries(alpm_objlib PUBLIC pacman::configuration)
 
 
 

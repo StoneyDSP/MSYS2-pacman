@@ -12,4 +12,3 @@
 #define pacman_REPOSITORY "https://github.com/StoneyDSP/msys2-pacman.git"
 
 #endif // pacman_VERSION_H_INCLUDED
-

@@ -56,6 +56,7 @@ add_subdirectory(config)
 
 # add_executable(vercmp)
 
+add_subdirectory(libmakepkg)
 
 ## configuration : substs,
 ## install_dir : SYSCONFDIR
