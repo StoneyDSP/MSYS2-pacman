@@ -1,7 +1,0 @@
-*.sh
-
-.vscode
-.cache
-usr
-bin
-out
