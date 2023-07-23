@@ -1,3 +1,6 @@
 [submodule "libmakepkg"]
 	path = libmakepkg
 	url = ../../StoneyDSP/MSYS2-libmakepkg.git
+[submodule "libalpm"]
+	path = libalpm
+	url = ../../StoneyDSP/MSYS2-libalpm.git
