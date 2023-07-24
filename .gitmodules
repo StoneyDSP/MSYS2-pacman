@@ -4,3 +4,6 @@
 [submodule "libalpm"]
 	path = libalpm
 	url = ../../StoneyDSP/MSYS2-libalpm.git
+[submodule "common"]
+	path = common
+	url = ../../StoneyDSP/MSYS2-libcommon.git
