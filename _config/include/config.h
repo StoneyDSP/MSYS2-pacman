@@ -9,125 +9,170 @@
  *
  */
 
-#ifndef PM_CONFIG_H
-#define PM_CONFIG_H
+#if !defined(PM_CONFIG_HEADER_INCLUDED)
+#define PM_CONFIG_HEADER_INCLUDED
 
 #include "defines.h"
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 # warning "A C++ compiler has been selected for C."
 extern "C" {
 #endif
 
-#if !defined(ROOTDIR)
+
 /**
- * @name ROOTDIR
- * @brief The location of the root operating directory.
+ * @brief
+ *
+ * 'prefix' defaults to "C:/" on Windows, and "/usr/local" otherwise.
+ *
+ * You should always override this value.
+ *
+ * 'libdir' is automatically detected based on your platform.
+ *
+ * It should be correct when doing "native" (build machine == host machine)
+ * compilation.
+ *
+ * For cross compiles it may not be accurate, especially on Linux where
+ * different distributions have different defaults. Using a cross file,
+ * particularly the paths section may be necessary.
+ *
+ * 'licensedir' is empty by default.
+ *
+ * If set, it defines the default location to install a dependency manifest and project licenses.
  *
  */
-#define ROOTDIR STRINGIFY(/)
+
+#if !defined(ROOTDIR)
+#	if defined(WIN32) || defined(MINGW)
+		/**
+		 * @name ROOTDIR
+		 * @brief The location of the root operating directory.
+		 */
+#		define ROOTDIR HOMEDRIVE PATH_SEPERATOR
+#	else
+		/**
+		 * @name ROOTDIR
+		 * @brief The location of the root operating directory.
+		 */
+#		define ROOTDIR HOMEDRIVE
+#	endif
 #endif
 
 #if !defined(PREFIX)
-/**
- * @name PREFIX
- * @brief The location of the project build tree.
- *
- *
- */
-#define PREFIX STRINGIFY(/usr)
+#	define PREFIX HOMEDRIVE STRINGIFY(usr)
 #endif
 
-
-#if !defined(SYSCONFDIR)
-/**
- * @name SYSCONFDIR
- * @brief
- *
- */
-#define SYSCONFDIR STRINGIFY(/etc)
+#if !defined(DATAROOTDIR)
+	/**
+	 * @name DATAROOTDIR
+	 * @brief Fix me!
+	 */
+#	define DATAROOTDIR PATH_SEPERATOR STRINGIFY(share)
 #endif
-
-
-#if !defined(LOCALSTATEDIR)
-/**
- * @name LOCALSTATEDIR
- * @brief
- *
- */
-#define LOCALSTATEDIR STRINGIFY(/var)
-#endif
-
 
 #if !defined(BINDIR)
-/**
- * @name BINDIR
- * @brief
- *
- */
-#define BINDIR STRINGIFY(/usr/bin)
+	/**
+	 * @name BINDIR
+	 * @brief Executable directory.
+	 */
+#	define BINDIR PATH_SEPERATOR STRINGIFY(bin)
 #endif
 
-
-#if !defined(LIBDIR)
-/**
- * @name LIBDIR
- * @brief
- *
- */
-#define LIBDIR STRINGIFY(/usr/lib)
+#if !defined(DATADIR)
+	/**
+	 * @name DATADIR
+	 * @brief Data file directory.
+	 */
+#	define DATADIR PATH_SEPERATOR STRINGIFY(share)
 #endif
-
-
-#if !defined(SBINDIR)
-/**
- * @name SBINDIR
- * @brief
- *
- */
-#define SBINDIR STRINGIFY(/usr/sbin)
-#endif
-
-
-#if !defined(LIBEXECDIR)
-/**
- * @name LIBEXECDIR
- * @brief
- *
- */
-#define LIBEXECDIR STRINGIFY(/usr/libexec)
-#endif
-
 
 #if !defined(INCLUDEDIR)
-/**
- * @name INCLUDEDIR
- * @brief
- *
- */
-#define INCLUDEDIR STRINGIFY(/usr/include)
+	/**
+	 * @name INCLUDEDIR
+	 * @brief Include Header file directory.
+	 */
+#	define INCLUDEDIR PATH_SEPERATOR STRINGIFY(include)
 #endif
 
+#if !defined(INFODIR)
+	/**
+	 * @name INFODIR
+	 * @brief Info page directory.
+	 */
+#	define INFODIR DATADIR PATH_SEPERATOR STRINGIFY(info)
+#endif
+
+#if !defined(LIBDIR)
+	/**
+	 * @name LIBDIR
+	 * @brief Library directory.
+	 */
+#	define LIBDIR PATH_SEPERATOR STRINGIFY(lib)
+#endif
+
+#if !defined(LIBEXECDIR)
+	/**
+	 * @name LIBEXECDIR
+	 * @brief Library executable directory.
+	 */
+#	define LIBEXECDIR PATH_SEPERATOR STRINGIFY(libexec)
+#endif
+
+#if !defined(LICENSEDIR)
+	/**
+	 * @name LICENSEDIR
+	 * @brief
+	 */
+#	define LICENSEDIR PATH_SEPERATOR
+#endif
+
+#if !defined(LOCALEDIR)
+	/**
+	 * @name LOCALEDIR
+	 * @brief Locale data directory.
+	 */
+#	define LOCALEDIR DATADIR PATH_SEPERATOR STRINGIFY(locale)
+#endif
+
+#if !defined(LOCALSTATEDIR)
+	/**
+	 * @name LOCALSTATEDIR
+	 * @brief Localstate data directory.
+	 */
+#	define LOCALSTATEDIR PATH_SEPERATOR STRINGIFY(var)
+#endif
+
+#if !defined(MANDIR)
+	/**
+	 * @name MANDIR
+	 * @brief Manual page directory.
+	 */
+#	define MANDIR DATADIR PATH_SEPERATOR STRINGIFY(man)
+#endif
+
+#if !defined(SBINDIR)
+	/**
+	 * @name SBINDIR
+	 * @brief System executable directory.
+	 */
+#	define SBINDIR PATH_SEPERATOR STRINGIFY(sbin)
+#endif
 
 #if !defined(SHAREDSTATEDIR)
-/**
- * @name SHAREDSTATEDIR
- * @brief
- *
- */
-#define SHAREDSTATEDIR STRINGIFY(/usr/com)
+	/**
+	 * @name SHAREDSTATEDIR
+	 * @brief Architecture-independent data directory.
+	 */
+#	define SHAREDSTATEDIR PATH_SEPERATOR STRINGIFY(com)
 #endif
 
-
-/** Construct the string literal in pieces to prevent the source from getting
- * matched. Store it in a pointer rather than an array because some compilers
- * will just produce instructions to fill the array rather than assigning a
- * pointer to a static array.
- */
-char const* prefix = PREFIX;
-char const* sysconfdir = SYSCONFDIR;
-char const* localstatedir = LOCALSTATEDIR;
-// char const* sharedstatedir = SHAREDSTATEDIR;
+#if !defined(SYSCONFDIR)
+	/**
+	 * @name SYSCONFDIR
+	 * @brief Sysconf data directory.
+	 */
+#	define SYSCONFDIR PATH_SEPERATOR STRINGIFY(etc)
+#endif
 
 
 /** HAVE_LIBCURL */
@@ -327,7 +372,37 @@ char const* localstatedir = LOCALSTATEDIR;
 #	define HAVE_TCFLUSH 0
 #endif
 
-#ifdef __cplusplus
+
+struct system {
+
+	const char* path_seperator = PATH_SEPERATOR;
+	const char* string_seperator = STRING_SEPERATOR;
+	const char* homedrive = HOMEDRIVE;
+	const char* rootdir = ROOTDIR;
+
+};
+
+struct paths {
+
+	const char* prefix = PREFIX;
+
+	const char* bindir = BINDIR;
+	const char* datadir = DATADIR;
+	const char* includedir = INCLUDEDIR;
+	const char* infodir = INFODIR;
+	const char* libdir = LIBDIR;
+	const char* licensedir = LICENSEDIR;
+	const char* libexecdir = LIBEXECDIR;
+	const char* localedir = LOCALEDIR;
+	const char* localstatedir = LOCALSTATEDIR;
+	const char* mandir = MANDIR;
+	const char* sbindir = SBINDIR;
+	const char* sharedstatedir = SHAREDSTATEDIR;
+	const char* sysconfdir = SYSCONFDIR;
+
+};
+
+#if defined(__cplusplus)
 };
 #endif
 

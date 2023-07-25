@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17...3.26 FATAL_ERROR)
 
-project(libconfig)
+project(LibConfig)
 enable_language(C)
 
 # Detect msys2.ini to figure MSYS_ROOT_DIR

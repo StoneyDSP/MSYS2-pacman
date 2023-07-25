@@ -9,22 +9,22 @@
  *
  */
 
-#ifndef PM_DEFINES_H
-#define PM_DEFINES_H
+#if !defined(PM_DEFINES_HEADER_INCLUDED)
+#define PM_DEFINES_HEADER_INCLUDED
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
-#ifndef STRINGIFY_HELPER
+#if !defined(STRINGIFY_HELPER)
 #	define STRINGIFY_HELPER(X) #X
 #endif /** STRINGIFY_HELPER */
 
-#ifndef STRINGIFY
+#if !defined(STRINGIFY)
 #	define STRINGIFY(X) STRINGIFY_HELPER(X)
 #endif /** STRINGIFY */
 
-#ifndef DEC
+#if !defined(DEC)
 /* Convert integer to decimal digit literals.  */
 #define DEC(n)                   \
   ('0' + (((n) / 10000000)%10)), \
@@ -37,7 +37,7 @@ extern "C" {
   ('0' +  ((n) % 10))
 #endif /** DEC */
 
-#ifndef HEX
+#if !defined(HEX)
 /* Convert integer to hex digit literals.  */
 #define HEX(n)             \
   ('0' + ((n)>>28 & 0xF)), \
@@ -50,21 +50,60 @@ extern "C" {
   ('0' + ((n)     & 0xF))
 #endif /** HEX */
 
-#cmakedefine PREFIX STRINGIFY(@PREFIX@)
 
-#cmakedefine DATAROOTDIR STRINGIFY(@DATAROOTDIR@)
-#cmakedefine SYSCONFDIR STRINGIFY(@SYSCONFDIR@)
-#cmakedefine LOCALSTATEDIR STRINGIFY(@LOCALSTATEDIR@)
-#cmakedefine LOCALEDIR STRINGIFY(@LOCALEDIR@)
-#cmakedefine ROOTDIR STRINGIFY(@ROOTDIR@)
-#cmakedefine BINDIR STRINGIFY(@BINDIR@)
-#cmakedefine MANDIR STRINGIFY(@MANDIR@)
-#cmakedefine LIBMAKEPKGDIR STRINGIFY(@LIBMAKEPKGDIR@)
-#cmakedefine PKGDATADIR STRINGIFY(@PKGDATADIR@)
+#if !defined(PATH_SEPERATOR)
+#	if defined(WIN32)
+#		define PATH_SEPERATOR STRINGIFY(\)
+#	else
+#		define PATH_SEPERATOR STRINGIFY(/)
+#	endif
+#endif
 
-#cmakedefine _GNU_SOURCE @_GNU_SOURCE@
-#cmakedefine PACKAGE STRINGIFY(@PROJECT_NAME@)
-#cmakedefine PACKAGE_VERSION STRINGIFY(@PACKAGE_VERSION@)
+#if !defined(STRING_SEPERATOR)
+#	if defined(WIN32)
+#		define STRING_SEPERATOR STRINGIFY(;)
+#	else
+#		define STRING_SEPERATOR STRINGIFY(:)
+#	endif
+#endif
+
+#if !defined(HOMEDRIVE)
+#	if defined(WIN32) || defined(MINGW)
+#		define HOMEDRIVE STRINGIFY(C:)
+#	else
+#		define HOMEDRIVE PATH_SEPERATOR
+#	endif
+#endif
+
+#define ROOTDIR STRINGIFY(@ROOTDIR@)
+
+#define PREFIX STRINGIFY(@PREFIX@)
+
+#define BINDIR STRINGIFY(@BINDIR@)
+#define DATADIR STRINGIFY(@DATADIR@)
+#define INCLUDEDIR STRINGIFY(@INCLUDEDIR@)
+#define INFODIR STRINGIFY(@INFODIR@)
+#define LIBDIR STRINGIFY(@LIBDIR@)
+#define LICENSEDIR STRINGIFY(@LICENSEDIR@)
+#define LIBEXECDIR STRINGIFY(@LIBEXECDIR@)
+#define LOCALEDIR STRINGIFY(@LOCALEDIR@)
+#define LOCALSTATEDIR STRINGIFY(@LOCALSTATEDIR@)
+#define MANDIR STRINGIFY(@MANDIR@)
+#define SBINDIR STRINGIFY(@SBINDIR@)
+#define SHAREDSTATEDIR STRINGIFY(@SHAREDSTATEDIR@)
+#define SYSCONFDIR STRINGIFY(@SYSCONFDIR@)
+
+#define HAVE_LIBCURL STRINGIFY(@HAVE_LIBCURLCURL@)
+#define HAVE_LIBGPGME STRINGIFY(@HAVE_LIBGPGME@)
+#define HAVE_LIBSSL STRINGIFY(@HAVE_LIBSSL@)
+#define HAVE_LIBNETTLE STRINGIFY(@HAVE_LIBNETTLE@)
+
+#define LIBMAKEPKGDIR STRINGIFY(@LIBMAKEPKGDIR@)
+#define PKGDATADIR STRINGIFY(@PKGDATADIR@)
+
+/** #cmakedefine _GNU_SOURCE @_GNU_SOURCE@ */
+#define PACKAGE STRINGIFY(@PROJECT_NAME@)
+#define PACKAGE_VERSION STRINGIFY(@PACKAGE_VERSION@)
 
 #cmakedefine SCRIPTLET_SHELL STRINGIFY(@SCRIPTLET_SHELL@)
 #cmakedefine LDCONFIG STRINGIFY(@LDCONFIG@)
@@ -77,7 +116,7 @@ extern "C" {
 #cmakedefine CACHEDIR STRINGIFY(@CACHEDIR@)
 #cmakedefine HOOKDIR STRINGIFY(@HOOKDIR@)
 
-#cmakedefine HAVE_CURL @HAVE_CURL@
+
 
 #cmakedefine01 HAVE_MNTENT_H
 #cmakedefine01 HAVE_SYS_MNTTAB_H
@@ -133,8 +172,8 @@ extern "C" {
 
 #cmakedefine PACMAN_DEBUG @PACMAN_DEBUG@
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 };
 #endif
 
-#endif /** PM_DEFINES_H */
+#endif /** PM_DEFINES_HEADER_INCLUDED */
