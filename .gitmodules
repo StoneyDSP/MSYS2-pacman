@@ -7,3 +7,6 @@
 [submodule "common"]
 	path = common
 	url = ../../StoneyDSP/MSYS2-libcommon.git
+[submodule "config"]
+	path = config
+	url = ../../StoneyDSP/MSYS2-libconfig.git
