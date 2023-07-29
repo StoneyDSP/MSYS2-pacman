@@ -43,6 +43,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 ##############################################################################
 
 add_subdirectory(common)
+set(LibCommon_DIR "${CMAKE_CURRENT_LIST_DIR}/common")
 
 add_subdirectory(libalpm)
 
