@@ -7,7 +7,7 @@ HeaderFilterRegex: '.*'
 AnalyzeTemporaryDtors: false
 FormatStyle:     'file'
 InheritParentConfig: false
-SystemHeaders: false
+SystemHeaders: true
 UseColor: true
 # User:            @USER@
 CheckOptions:

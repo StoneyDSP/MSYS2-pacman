@@ -1,0 +1,14 @@
+---
+Checks: ''
+WarningsAsErrors: ''
+HeaderFileExtensions: ['h', 'hh', 'hpp', 'h++', 'hxx']
+ImplementationFileExtensions: ['c', 'cc', 'cpp', 'c++', 'cxx', 'cppm']
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     'file'
+InheritParentConfig: true
+SystemHeaders: true
+UseColor: true
+# User:            @USER@
+CheckOptions:
+...
